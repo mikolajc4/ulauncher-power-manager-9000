@@ -30,11 +30,16 @@ class KeywordQueryEventListener(EventListener):
         if id == "lock-screen":
             subprocess.Popen(["loginctl", "lock-session"])
         if id == "suspend":
+            subprocess.Popen(["loginctl", "lock-session"])
+            subprocess.Popen(["systemctl", "suspend", "-i"])
+        if id == "naptime":
             subprocess.Popen(["systemctl", "suspend", "-i"])
         if id == "shutdown":
             subprocess.Popen(["systemctl", "poweroff", "-i"])
         if id == "restart":
             subprocess.Popen(["systemctl", "reboot", "-i"])
+        if id == "logout":
+            subprocess.Popen(["loginctl", "terminate-session", "self"])
 
 
 SystemManagementDirect().run()
