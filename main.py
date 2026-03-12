@@ -39,9 +39,9 @@ class KeywordQueryEventListener(EventListener):
         if id == "restart":
             subprocess.Popen(["systemctl", "reboot", "-i"])
         if id == "logout":
-            subprocess.Popen(["loginctl", "terminate-session", ""])
+            subprocess.Popen(["bash", "-c", "sleep 1 && pkill -KILL -u $USER"])
         if id == "safe-logout":
-            subprocess.Popen(["loginctl", "terminate-session", "self"])
+            subprocess.Popen(["bash", "-c", "loginctl terminate-session $(loginctl session-status | head -1 | awk '{print $1}')"])
 
 
 SystemManagementDirect().run()
