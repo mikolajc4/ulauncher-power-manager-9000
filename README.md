@@ -9,6 +9,7 @@ additional sub-menu.
 - **Suspend** - Lock screen and suspend the system
 - **Naptime** - Suspend without locking the screen
 - **Logout** - Log out of the current session
+- **Safe Logout** - Cleanly log out of the current session (slower but graceful)
 - **Restart** - Restart the system
 - **Shut Down** - Shut down the system
 
