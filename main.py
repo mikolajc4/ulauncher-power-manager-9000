@@ -41,7 +41,7 @@ class KeywordQueryEventListener(EventListener):
         if id == "logout":
             subprocess.Popen(["bash", "-c", "sleep 1 && pkill -KILL -u $USER"])
         if id == "safe-logout":
-            subprocess.Popen(["bash", "-c", "loginctl terminate-session $(loginctl session-status | head -1 | awk '{print $1}')"])
+            subprocess.Popen(["bash", "-c", "sleep 1 && loginctl terminate-session $(loginctl session-status | head -1 | awk '{print $1}')"])
 
 
 SystemManagementDirect().run()

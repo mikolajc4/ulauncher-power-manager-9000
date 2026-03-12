@@ -53,7 +53,7 @@
       "id": "safe-logout",
       "type": "keyword",
       "name": "Safe Logout",
-      "default_value": "Safe Logout",
+      "default_value": "safelogout",
       "description": "Cleanly log out of the current session"
     }
   ]
