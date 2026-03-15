@@ -17,6 +17,19 @@ class SystemManagementDirect(Extension):
 
 
 class KeywordQueryEventListener(EventListener):
+    def __init__(self):
+        self._commands = {
+            "lock-screen": [["loginctl", "lock-session"]],
+            "suspend": [["loginctl", "lock-session"],
+                        ["systemctl", "suspend", "-i"]],
+            "naptime": [["systemctl", "suspend", "-i"]],
+            "shutdown": [["systemctl", "poweroff", "-i"]],
+            "restart": [["systemctl", "reboot", "-i"]],
+            "logout": [["bash", "-c", "sleep 1 && pkill -KILL -u $USER"]],
+            "safe-logout": [["bash", "-c", "sleep 1 && loginctl terminate-session $(loginctl session-status | head -1 | awk '{print $1}')"]]  # noqa
+        }
+        super().__init__()
+        
     def on_event(self, event, extension):
         keyword = event.get_keyword()
 
@@ -25,23 +38,15 @@ class KeywordQueryEventListener(EventListener):
             if kw == keyword:
                 self.on_match(id)
                 return HideWindowAction()
+        return None
 
     def on_match(self, id):
-        if id == "lock-screen":
-            subprocess.Popen(["loginctl", "lock-session"])
-        if id == "suspend":
-            subprocess.Popen(["loginctl", "lock-session"])
-            subprocess.Popen(["systemctl", "suspend", "-i"])
-        if id == "naptime":
-            subprocess.Popen(["systemctl", "suspend", "-i"])
-        if id == "shutdown":
-            subprocess.Popen(["systemctl", "poweroff", "-i"])
-        if id == "restart":
-            subprocess.Popen(["systemctl", "reboot", "-i"])
-        if id == "logout":
-            subprocess.Popen(["bash", "-c", "sleep 1 && pkill -KILL -u $USER"])
-        if id == "safe-logout":
-            subprocess.Popen(["bash", "-c", "sleep 1 && loginctl terminate-session $(loginctl session-status | head -1 | awk '{print $1}')"])
-
+        commands = self._commands.get(id, None)
+        if not commands:
+            return
+        
+        for cmd in commands:
+            subprocess.Popen(cmd)
+            
 
 SystemManagementDirect().run()
